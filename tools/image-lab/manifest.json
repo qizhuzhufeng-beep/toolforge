@@ -1,0 +1,8 @@
+{
+  "id": "image-lab",
+  "name": "图片工作台",
+  "description": "批量压缩、转格式、调尺寸、加文字水印，全程本地处理，照片不出设备",
+  "icon": "icon.svg",
+  "category": "media",
+  "offline": false
+}
