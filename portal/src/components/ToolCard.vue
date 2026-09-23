@@ -11,7 +11,7 @@ const entryUrl = `${base}${props.tool.entry}`
 </script>
 
 <template>
-  <a class="card" :href="entryUrl">
+  <a class="card" :href="entryUrl" target="_blank" rel="noopener">
     <img :src="iconUrl" alt="" class="icon" />
     <div class="meta">
       <div class="title-row">
