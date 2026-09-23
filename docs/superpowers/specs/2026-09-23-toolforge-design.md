@@ -70,7 +70,7 @@ d:\toolstest\
 | `offline` | boolean | 是 | 是否完全离线可用 |
 | `entry` | string | 否 | 入口 HTML，默认 `index.html` |
 
-校验规则（`scripts/validate-manifests.mjs`）：缺字段、id 与文件夹名不一致、category 非法、图标文件不存在 → 构建直接失败并指出具体文件。校验脚本本身有单元测试。
+校验规则（实现位于 `scripts/lib/validate-manifest.mjs`，由 `scripts/lib/generate-registry.mjs` 消费）：缺字段（null 亦视为缺失）、字符串字段非字符串、id 与文件夹名不一致、category 非法、图标文件不存在 → 构建直接失败并指出具体文件。校验脚本本身有单元测试。
 
 ## 7. 自动发现机制
 
@@ -89,10 +89,10 @@ d:\toolstest\
 
 ### 9.0 portal 门户
 
-- PWA 壳：可安装到主屏、缓存自身资源、离线可打开。
+- PWA 壳：可安装到主屏、缓存自身资源、离线可打开（预缓存含 tools.json 与图标）。
 - 工具卡片网格：图标 + 名称 + 描述 + 分类徽章；顶部搜索框按名称/描述过滤。
 - 点击卡片新开标签进入工具。
-- 部署于站点根路径（base `/`）。
+- 部署路径：base 可配置（`VITE_BASE` 环境变量）——本地开发为根路径 `/`，GitHub Pages 项目页为 `/<repo-name>/`（由 CI 注入）。
 
 ### 9.1 tools/image-lab 图片工作台（分类 media）
 
