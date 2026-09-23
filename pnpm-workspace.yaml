@@ -3,3 +3,5 @@ packages:
   - tools/*
   - shared
   - scripts
+onlyBuiltDependencies:
+  - esbuild

@@ -8,8 +8,5 @@
     "dev:portal": "pnpm --filter portal dev",
     "build": "pnpm -r build",
     "test": "pnpm -r test"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": ["esbuild"]
   }
 }
