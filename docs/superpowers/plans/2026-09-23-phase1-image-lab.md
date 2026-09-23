@@ -663,6 +663,8 @@ git commit -m "feat(image-lab): 处理核心纯函数（尺寸/水印几何/格�
 - Create: `tools/image-lab/src/components/SettingsPanel.vue`
 - Create: `tools/image-lab/src/components/FileItem.vue`
 - Modify: `tools/image-lab/src/App.vue`（替换占位版）
+- Modify: `tools/image-lab/src/app.css`（暗色对比度修正，Task 1 审查裁决）
+- Modify: `tools/image-lab/package.json`（摘除 --passWithNoTests，测试已落地）
 
 **Interfaces:**
 - Consumes: Task 2 全部纯函数（签名见 Task 2 Interfaces）；`@toolforge/shared/theme.css` 的 CSS 变量（`--bg/--surface/--text/--text-secondary/--border/--accent/--accent-soft/--radius/--shadow`，已在 app.css 使用）。
@@ -1173,19 +1175,32 @@ onBeforeUnmount(() => clearAll())
 </template>
 ```
 
-- [ ] **Step 6: 类型检查 + 构建 + 全仓测试**
+- [ ] **Step 6: 暗色对比度修正 + 摘除测试旗标（Task 1 审查裁决）**
+
+`tools/image-lab/src/app.css`——`.btn.primary` 的 `color: #fff` 在暗色 accent（#6f9bf0）下仅约 2.7:1 对比度，`.err` 的 `#d4506c` 在暗色面板上约 4:1，均不达 AA。在文件末尾追加：
+
+```css
+@media (prefers-color-scheme: dark) {
+  .btn.primary { color: #14161a; }
+  .err { color: #ff8aa3; }
+}
+```
+
+`tools/image-lab/package.json`——测试文件已由 Task 2 落地，test 脚本改回 `"test": "vitest run"`（摘除 `--passWithNoTests`，避免长期掩盖测试发现问题）。
+
+- [ ] **Step 7: 类型检查 + 构建 + 全仓测试**
 
 Run: `pnpm --filter image-lab build && pnpm test`
 Expected: image-lab 构建绿（vue-tsc + vite）；全仓 **41** 个测试全绿（shared 4 + scripts 15 + portal 4 + image-lab 18）。
 
-- [ ] **Step 7: 零网络请求与集成冒烟**
+- [ ] **Step 8: 零网络请求与集成冒烟**
 
 Run: `grep -rniE "fetch\(|XMLHttpRequest|https?://" tools/image-lab/src/ | grep -v "svg" | wc -l`
 Expected: `0`（src/ 内零网络引用；验收标准「全程零网络请求」的静态面）。
 
 Run: `pnpm --filter image-lab preview` 后 `curl -s -o /dev/null -w "%{http_code}" http://localhost:4173/`（或终端提示端口），确认 200 后 Ctrl+C。真机批量压缩验收（10×8MB → ≤2MB、手机流畅）留给人事实核，见「计划完成后」。
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 9: Commit**
 
 ```bash
 git add tools/image-lab
