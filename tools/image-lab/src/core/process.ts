@@ -8,7 +8,12 @@ import type { ImageSettings, ProcessedImage } from '../types'
  * 调用方必须顺序 await（内存验收：10×8MB 不并发）。
  */
 export async function processImage(file: File, settings: ImageSettings): Promise<ProcessedImage> {
-  const bitmap = await createImageBitmap(file)
+  let bitmap: ImageBitmap
+  try {
+    bitmap = await createImageBitmap(file)
+  } catch {
+    throw new Error(`无法解码图片：${file.name}（该格式可能不被浏览器支持）`)
+  }
   const { width, height } = computeTargetSize(bitmap.width, bitmap.height, settings.resize)
 
   const canvas = document.createElement('canvas')

@@ -70,6 +70,7 @@ async function processAll() {
   try {
     // 顺序处理：内存验收（10×8MB）依赖不并发
     for (const item of items.value) {
+      if (!items.value.includes(item)) continue // 运行中被移除的条目：跳过
       if (item.status === 'done') continue
       item.status = 'processing'
       try {

@@ -205,5 +205,5 @@ main {
 
 @media (prefers-color-scheme: dark) {
   .btn.primary { color: #14161a; }
-  .err { color: #ff8aa3; }
+  .file .err { color: #ff8aa3; }
 }
