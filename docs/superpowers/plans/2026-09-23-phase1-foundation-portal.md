@@ -1053,7 +1053,7 @@ const entryUrl = `${base}${props.tool.entry}`
 </script>
 
 <template>
-  <a class="card" :href="entryUrl">
+  <a class="card" :href="entryUrl" target="_blank" rel="noopener">
     <img :src="iconUrl" alt="" class="icon" />
     <div class="meta">
       <div class="title-row">
@@ -1083,6 +1083,8 @@ const failed = ref(false)
 const query = ref('')
 
 const visible = computed(() => filterTools(tools.value, query.value))
+// SFC 模板内的绝对路径不会被 Vite 重写 base，子路径部署须显式拼接
+const logoUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/icon.svg`
 
 onMounted(async () => {
   try {
@@ -1103,7 +1105,7 @@ onMounted(async () => {
 
 <template>
   <header class="hero">
-    <img src="/icon.svg" alt="" class="logo" />
+    <img :src="logoUrl" alt="" class="logo" />
     <h1>ToolForge 工具集</h1>
     <p class="subtitle">本地处理 · 跨设备可用 · 免安装即用</p>
     <input v-model="query" class="search" type="search" placeholder="搜索工具…" />
