@@ -60,4 +60,12 @@ describe('buildRegistry', () => {
     expect(entries).toEqual([])
     expect(errors).toEqual([])
   })
+
+  it('缺失 manifest.json 报文件不存在而非解析失败', () => {
+    const err = new Error('ENOENT')
+    err.code = 'ENOENT'
+    const { errors } = buildRegistry(['ghost'], () => { throw err }, () => true)
+    expect(errors).toHaveLength(1)
+    expect(errors[0]).toContain('文件不存在')
+  })
 })

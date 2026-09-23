@@ -48,4 +48,14 @@ describe('validateManifest', () => {
     expect(validateManifest('oops', 'pdf-kit', () => true)).toHaveLength(1)
     expect(validateManifest(null, 'pdf-kit', () => true)).toHaveLength(1)
   })
+
+  it('字段为 null 视为缺失', () => {
+    const errors = validateManifest({ ...good, name: null }, 'pdf-kit', () => true)
+    expect(errors.join('\n')).toContain('"name"')
+  })
+
+  it('字符串字段为非字符串报错', () => {
+    const errors = validateManifest({ ...good, icon: 123 }, 'pdf-kit', () => true)
+    expect(errors.join('\n')).toContain('必须为字符串')
+  })
 })

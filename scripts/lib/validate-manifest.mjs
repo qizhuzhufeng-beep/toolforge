@@ -16,8 +16,13 @@ export function validateManifest(manifest, folderName, fileExists = () => true) 
   }
   const errors = []
   for (const field of REQUIRED) {
-    if (manifest[field] === undefined) {
+    if (manifest[field] == null) {
       errors.push(`${folderName}/manifest.json: 缺少必填字段 "${field}"`)
+    }
+  }
+  for (const field of ['id', 'name', 'description', 'icon']) {
+    if (manifest[field] != null && typeof manifest[field] !== 'string') {
+      errors.push(`${folderName}/manifest.json: 字段 "${field}" 必须为字符串`)
     }
   }
   if (manifest.id !== undefined && manifest.id !== folderName) {

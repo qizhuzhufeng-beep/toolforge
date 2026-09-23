@@ -5,5 +5,3 @@ packages:
   - scripts
 allowBuilds:
   esbuild: true
-onlyBuiltDependencies:
-  - esbuild

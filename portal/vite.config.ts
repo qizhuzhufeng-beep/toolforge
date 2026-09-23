@@ -12,6 +12,10 @@ export default defineConfig({
     VitePWA({
       base,
       registerType: 'autoUpdate',
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,svg,json,webmanifest,ico,png}'],
+      },
+      includeAssets: ['tools.json', 'icon.svg', 'icon-maskable.svg'],
       manifest: {
         name: 'ToolForge 工具集',
         short_name: 'ToolForge',

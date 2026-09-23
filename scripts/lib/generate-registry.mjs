@@ -22,7 +22,11 @@ export function buildRegistry(toolFolders, readManifest, fileExists) {
     try {
       parsed = JSON.parse(readManifest(folder))
     } catch (e) {
-      errors.push(`${folder}/manifest.json: JSON 解析失败 — ${e.message}`)
+      if (e && e.code === 'ENOENT') {
+        errors.push(`${folder}/manifest.json: 文件不存在`)
+      } else {
+        errors.push(`${folder}/manifest.json: JSON 解析失败 — ${e.message}`)
+      }
       continue
     }
     const errs = validateManifest(parsed, folder, fileExists)
