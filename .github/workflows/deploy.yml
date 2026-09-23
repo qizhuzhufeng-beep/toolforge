@@ -1,0 +1,57 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm build
+        env:
+          # 仓库子路径部署；portal 与各工具的 vite.config 均读取此变量
+          VITE_BASE: /${{ github.event.repository.name }}/
+      - name: 汇聚各包产物
+        run: |
+          mkdir -p deploy-dist
+          cp -r portal/dist/* deploy-dist/
+          for d in tools/*/dist; do
+            if [ -d "$d" ]; then
+              mkdir -p "deploy-dist/tools"
+              cp -r "$d" "deploy-dist/${d%/dist}"
+            fi
+          done
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: deploy-dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
