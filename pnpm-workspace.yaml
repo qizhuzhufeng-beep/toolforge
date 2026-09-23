@@ -3,5 +3,7 @@ packages:
   - tools/*
   - shared
   - scripts
+allowBuilds:
+  esbuild: true
 onlyBuiltDependencies:
   - esbuild
